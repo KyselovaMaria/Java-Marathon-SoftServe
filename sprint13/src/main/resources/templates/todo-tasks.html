@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.css"
+          th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="../static/css/style.css"
+          th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}">
+    <title>All Tasks of ToDo List</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{header :: header}"></div>
+<main>
+    <nav id="main-header"
+         class="ps-1 py-1 mb-3 navbar navbar-light bg-light text-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav float-start">
+                <li class="nav-item"
+                    title="Back to all todo lists of 'userName'"
+                    th:title="${'Back to all todo lists of ' + todo.owner.firstName + ' ' + todo.owner.lastName}">
+                    <a href="todos-user.html"
+                       th:href="@{|/todos/all/users/${todo.owner.id}|}"
+                       class="btn btn-light btn-block"><i class="bi-arrow-left"></i></a>
+                </li>
+            </ul>
+            <span class="navbar-brand text-uppercase me-auto"
+                  th:text="${todo.title}"
+            >All ToDo lists of 'Boris The Blade'</span>
+            <ul class="navbar-nav ">
+                <li class="nav-item" title="Add user">
+                    <a href="create-todo.html"
+                       th:href="@{|/tasks/create/todos/${id}|}"
+                       class="btn btn-light" title="Create new useful task!">
+                        <i class="bi-plus"></i>&nbsp;<span class="d-none d-sm-inline">Create new task</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section id="tasks">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <label class="form-label" for="tasks_table">Tasks:</label>
+                            <table class="table table-striped" id="tasks_table">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Priority</th>
+                                    <th>State</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="task, stat: ${tasks}">
+                                    <td th:text="${stat.count}">1</td>
+                                    <td th:text="${task.id}">10</td>
+                                    <td th:text="${task.name}">Task #256</td>
+                                    <td th:text="${task.priority}">maximal</td>
+                                    <td th:text="${task.state.name}">конь не валялся</td>
+                                    <td class="text-end">
+                                        <a href="update-task.html"
+                                           th:href="@{/tasks/{task_id}/update/todos/{todo_id}(task_id=${task.id}, todo_id=${id})}"
+                                           class="btn-sm btn-outline-secondary"
+                                           title="Edit task">
+                                            <i class="bi-pen"></i>
+                                            <span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                        <a href="update-todo.html"
+                                           th:href="@{/tasks/{task_id}/delete/todos/{todo_id}(task_id=${task.id}, todo_id=${id})}"
+                                           class="btn-sm btn-outline-secondary"
+                                           title="Delete task">
+                                            <i class="bi-x"></i>
+                                            <span class="d-none d-md-inline">&nbsp;Delete</span></a>
+                                    </td>
+                                </tr>
+                                <tr th:remove="all">
+                                    <td>2</td>
+                                    <td>6</td>
+                                    <td>Nick To-do #2</td>
+                                    <td>16.09.2021 14:14</td>
+                                    <td>Nora White</td>
+                                    <td class="text-end">
+                                        <a href="update-todo.html"
+                                           class="btn-sm btn-outline-secondary"
+                                           title="Edit user">
+                                            <i class="bi-pen"></i><span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                        <span data-bs-toggle="modal" data-bs-target="#deleteDialog">
+                                    <a href="#" class="btn-sm btn-outline-secondary"
+                                       title="delete user"><i class="bi-x"></i><span
+                                            class="d-none d-md-inline">&nbsp;Delete</span>
+                                    </a>
+                                </span>
+                                    </td>
+                                </tr>
+                                <tr th:remove="all">
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>Nick To-do #5</td>
+                                    <td>16.09.2022 14:14</td>
+                                    <td>Mike Brown</td>
+                                    <td class="text-end">
+                                        <a href="update-todo.html"
+                                           class="btn-sm btn-outline-secondary"
+                                           title="Edit user">
+                                            <i class="bi-pen"></i><span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                        <span data-bs-toggle="modal" data-bs-target="#deleteDialog">
+                                    <a href="#" class="btn-sm btn-outline-secondary"
+                                       title="delete user"><i class="bi-x"></i><span
+                                            class="d-none d-md-inline">&nbsp;Delete</span>
+                                    </a>
+                                </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-body">
+                            <form th:action="@{|/todos/${id}/add|}" method="get">
+                                <div class="row mb-1">
+                                    <label class="col-sm-2 form-label" for="collaborators_option">Collaborators:</label>
+                                    <div class="col-sm-5">
+                                        <select class="form-select" id="collaborators_option" name="selectedUser">
+                                            <option th:each="user : ${freeUsers}"
+                                                    th:value="${user.id}"
+                                                    th:text="${user.firstName + ' ' + user.lastName}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-primary" title="Add collaborator">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-striped" id="collaborators_table">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Name</th>
+                                    <th></th>
+                                </tr>
+                                <tr th:each="collaborator, i: ${todo.collaborators}">
+                                    <td th:text="${i.count}">1</td>
+                                    <td><a th:href="@{|/todos/all/users/${collaborator.id}|}"
+                                           th:text="${collaborator.firstName + ' ' + collaborator.lastName}"
+                                    >Franky "Four-Fingers"</a>
+                                    </td>
+                                    <td class="text-end">
+                                        <a th:href="@{/todos/{todoId}/remove(todoId=${todo.id}, collaboratorId=${collaborator.id})}"
+                                           class="btn-sm btn-outline-secondary"
+                                           title="Remove collaborator">
+                                            <i class="bi-x"></i>
+                                            <span class="d-none d-md-inline">&nbsp;Remove</span></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!--<br>-->
+<!--<br>-->
+<!--<h1>Collaborators:</h1>-->
+<!--<form th:action="@{/todos/{id}/add(id = ${id})}" method="get">-->
+<!--    <select name="user_id">-->
+<!--        <option>Select collaborator...</option>-->
+<!--        <option th:each="user : ${users}" th:value="${user.id}"-->
+<!--                th:text="${user.firstName + ' ' + user.lastName}"></option>-->
+<!--    </select>-->
+<!--    <input type="submit" value="Add">-->
+<!--</form>-->
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

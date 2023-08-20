@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.css"
+          th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="../static/css/style.css"
+          th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}">
+    <title>Update User</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{header :: header}"></div>
+<main>
+    <nav id="main-header"
+         class="ps-1 py-1 mb-3 navbar navbar-light bg-light text-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav float-start">
+                <li class="nav-item" title="Back to list">
+                    <a href="home.html"
+                       th:href="@{/}"
+                       class="btn btn-light btn-block"><i class="bi-arrow-left"></i></a>
+                </li>
+            </ul>
+            <span class="navbar-brand text-uppercase me-auto">Update user</span>
+        </div>
+    </nav>
+    <section id="user">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="userForm"
+                                  th:object="${user}"
+                                  th:action="@{${#httpServletRequest.servletPath}}"
+                                  th:method="@{post}">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_id">ID:</label>
+                                    <input class="form-control"
+                                           id="field_id"
+                                           type="text"
+                                           value="99"
+                                           th:field="*{id}" readonly/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_firstName">First name:</label>
+                                    <input class="form-control"
+                                           id="field_firstName"
+                                           type="text"
+                                           value="Boris"
+                                           th:field="*{firstName}"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_lastName">Last name:</label>
+                                    <input class="form-control"
+                                           id="field_lastName"
+                                           type="text"
+                                           value="The blade"
+                                           th:field="*{lastName}"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_email">E-mail:</label>
+                                    <input class="form-control"
+                                           id="field_email"
+                                           type="text"
+                                           value="kitten@mail.uk"
+                                           th:field="*{email}"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_oldPassword">Old Password:</label>
+                                    <input class="form-control"
+                                           id="field_oldPassword"
+                                           type="password"
+                                           value="1234"
+                                           th:field="*{password}"/>
+                                    <label class="form-check-label" for="field_oldPasswordSwitch">Show password</label>
+                                    <input class="form-check-input" id="field_oldPasswordSwitch"
+                                           type="checkbox"
+                                           onclick="passwordSwitch('field_oldPassword')"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_newPassword">New Password:</label>
+                                    <input class="form-control"
+                                           id="field_newPassword"
+                                           type="password"
+                                           value="1234"
+                                           th:value="${newPassword}" name="newPassword"/>
+                                    <label class="form-check-label" for="field_newPasswordSwitch">Show password</label>
+                                    <input class="form-check-input" id="field_newPasswordSwitch"
+                                           type="checkbox"
+                                           onclick="passwordSwitch('field_newPassword')"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_userRole">Role</label>
+                                    <select class="form-control" id="field_userRole" th:field="*{role.id}">
+                                        <option value="0" text="Select role"></option>
+                                        <option th:each="role : ${roles}"
+                                                th:value="${role.id}"
+                                                th:text="${role.name}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <a href="home.html"
+                                       th:href="@{|/users/${user.id}/update|}"
+                                       class="btn btn-light me-1"
+                                       title="Cancel">Clear</a>
+                                    <a href="home.html"
+                                       th:href="@{/}"
+                                       th:onclick="@{document.forms['userForm'].submit(); return false;}"
+                                       class="btn btn-primary"
+                                       title="Save user">Update</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div th:replace="~{footer :: footer}"></div>
+
+<script>
+function passwordSwitch(a) {
+  var x = document.getElementById(a);
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+</body>
+</html>

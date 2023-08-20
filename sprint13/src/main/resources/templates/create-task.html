@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Task</title>
+    <link rel="stylesheet" href="/general.css">
+</head>
+<body>
+<div th:insert="~{header :: header}" style="display: flex; padding: 0 20px; border-bottom: solid 1px gray;"></div>
+<h1>Create New Task</h1>
+<form th:action="@{/tasks/create/todos/{todo_id}(todo_id=${todo_id})}" th:object="${task}" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" name="name" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>Priority:</td>
+            <td>
+                <select id="priority" name="priority">
+                    <option th:each="priority : ${priorities}" th:utext="${priority.name()}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Create"></td>
+            <td><input type="reset" value="Clear"></td>
+            <td>
+                <a th:href="@{/todos/{todo_id}/tasks(todo_id=${todo_id})}" class="button" style="color: blue;">Go to Task list</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

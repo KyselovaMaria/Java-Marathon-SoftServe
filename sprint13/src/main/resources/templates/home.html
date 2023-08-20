@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.css"
+          th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="../static/css/style.css"
+          th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}">
+    <title>Home page</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{header :: header}"></div>
+<main>
+    <nav id="main-header"
+         class="ps-1 py-1 mb-3 navbar navbar-light bg-light text-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand text-uppercase">Users</span>
+            <ul class="navbar-nav ">
+                <li class="nav-item" title="Add user">
+                    <a href="create-user.html"
+                       th:href="@{/users/create}"
+                       class="btn btn-light" title="Add new user into database">
+                        <i class="bi-plus"></i>&nbsp;<span class="d-none d-sm-inline">Create new User</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section id="users">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>No.</th>
+                            <th>Id</th>
+                            <th>Full name</th>
+                            <th>E-mail</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user,stat : ${users}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${user.id}">5</td>
+                            <td class="text-name">
+                                <a href="todos-user.html"
+                                   th:text="${user.firstName + ' ' + user.lastName}"
+                                   th:href="@{|/todos/all/users/${user.id}|}">Boris The Blade</a>
+                            </td>
+                            <td th:text="${user.email}">kitten@mail.uk</td>
+                            <td class="text-end">
+                                <a href="update-user.html"
+                                   th:href="@{|/users/${user.id}/update|}"
+                                   class="btn-sm btn-outline-secondary"
+                                   title="Edit user">
+                                    <i class="bi-pen"></i><span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                <span data-bs-toggle="modal" data-bs-target="#deleteDialog"
+                                      th:attr="data-id=${user.id},data-name=${user.firstName + ' ' + user.lastName}">
+                                    <a href="#" class="btn-sm btn-outline-secondary"
+                                       title="Delete user"><i class="bi-x"></i><span
+                                            class="d-none d-md-inline">&nbsp;Delete</span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:remove="all">
+                            <td>2</td>
+                            <td>6</td>
+                            <td>Nora White</td>
+                            <td>nora@mail.com</td>
+                            <td class="text-end">
+                                <a href="update-user.html"
+                                   class="btn-sm btn-outline-secondary"
+                                   title="Edit user">
+                                    <i class="bi-pen"></i><span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                <span data-bs-toggle="modal" data-bs-target="#deleteDialog">
+                                    <a href="#" class="btn-sm btn-outline-secondary"
+                                       title="delete user"><i class="bi-x"></i><span
+                                            class="d-none d-md-inline">&nbsp;Delete</span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:remove="all">
+                            <td>3</td>
+                            <td>4</td>
+                            <td>Mike Brown</td>
+                            <td>mike@mail.com</td>
+                            <td class="text-end">
+                                <a href="update-user.html"
+                                   class="btn-sm btn-outline-secondary"
+                                   title="Edit user">
+                                    <i class="bi-pen"></i><span class="d-none d-md-inline">&nbsp;Edit</span></a>
+                                <span data-bs-toggle="modal" data-bs-target="#deleteDialog">
+                                    <a href="#" class="btn-sm btn-outline-secondary"
+                                       title="delete user"><i class="bi-x"></i><span
+                                            class="d-none d-md-inline">&nbsp;Delete</span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div th:replace="~{footer :: footer}"></div>
+
+<div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Please confirm delete
+            </div>
+            <div class="modal-footer">
+                <a id="cancelBtn" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+                <a id="deleteBtn" class="btn btn-danger" href="#">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/bootstrap.bundle.min.js"
+        th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="../static/js/jquery-3.4.1.slim.min.js"
+        th:src="@{/js/jquery-3.4.1.slim.min.js}"></script>
+<script>
+    $('#deleteDialog').on('show.bs.modal', function (event) {
+        var target = $(event.relatedTarget)
+
+        document.getElementById('deleteBtn').href = '/users/' + target.data('id') + '/delete';
+        $(this).find('.modal-body').text('Do you really want to delete the user: "' + target.data('name') + '" ?')
+        document.getElementById('deleteBtn').style.visibility="visible";
+        document.getElementById('cancelBtn').textContent="Cancel";
+    })
+</script>
+
+</body>
+</html>

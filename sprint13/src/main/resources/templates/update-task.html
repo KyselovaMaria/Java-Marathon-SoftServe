@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+    <link rel="stylesheet" href="/general.css">
+</head>
+<body>
+<div th:insert="~{header :: header}" style="display: flex; padding: 0 20px; border-bottom: solid 1px gray;"></div>
+<h1>Update Task</h1>
+<form th:action="@{/tasks/{task_id}/update/todos/{todo_id}(task_id=${task.id}, todo_id=${task.getTodo().getId()})}" th:object="${taskUpdate}" method="post">
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="text" name="id" th:value="${task.id}" disabled></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input autocomplete="off" type="text" name="name" th:value="${task.name}"></td>
+        </tr>
+        <tr>
+            <td>Priority:</td>
+            <td>
+                <select id="priority" name="priority">
+                    <option th:utext="${task.priority}"></option>
+                    <option th:each="priority : ${priorities}" th:utext="${priority.name()}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Status:</td>
+            <td>
+                <select id="state" name="state">
+                    <option th:utext="${task.state.name}" th:value="${task.state.id}"></option>
+                    <option th:each="state : ${states}" th:utext="${state.name}" th:value="${state.id}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Edit"></td>
+            <td><input type="reset" value="Clear"></td>
+        </tr>
+    </table>
+</form>
+<a th:href="@{/todos/{todo_id}/tasks(todo_id=${todo_id})}" class="button" style="color: blue;">Go to Task list</a>
+</body>
+</html>

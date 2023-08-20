@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.css"
+          th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="../static/css/style.css"
+          th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}">
+    <title>Update existing To-Do</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{header :: header}"></div>
+<main>
+    <nav id="main-header"
+         class="ps-1 py-1 mb-3 navbar navbar-light bg-light text-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav float-start">
+                <li class="nav-item"
+                    title="Back to all todo lists of 'userName'"
+                    th:title="${'Back to all todo lists of ' + user.firstName + ' ' + user.lastName}">
+                    <a href="todos-user.html"
+                       th:href="@{|/todos/all/users/${user.id}|}"
+                       class="btn btn-light btn-block"><i class="bi-arrow-left"></i></a>
+                </li>
+            </ul>
+            <span class="navbar-brand text-uppercase me-auto"
+                  th:text="${'Update todo list for ' + user.firstName + ' ' + user.lastName}"
+            >Update todo list for 'userName'</span>
+        </div>
+    </nav>
+    <section id="todo">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="todoForm"
+                                  th:object="${todo}"
+                                  th:action="@{${#httpServletRequest.servletPath}}"
+                                  th:method="@{post}">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_id">ID:</label>
+                                    <input class="form-control"
+                                           id="field_id"
+                                           type="text"
+                                           value="42"
+                                           th:field="*{id}" readonly/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_title">Title:</label>
+                                    <input class="form-control"
+                                           id="field_title"
+                                           type="text"
+                                           value="Boris To-do #1"
+                                           th:field="*{title}" autofocus/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="field_created_at">Title:</label>
+                                    <input class="form-control"
+                                           id="field_created_at"
+                                           type="text"
+                                           value="31-02-2025 11:11"
+                                           th:field="*{createdAt}" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="collaborators_table">Collaborators:</label>
+                                    <table class="table table-striped" id="collaborators_table">
+                                        <thead class="table-dark">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Id</th>
+                                            <th>Full name</th>
+                                            <th>E-mail</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="user,stat : ${collaborators}">
+                                            <td th:text="${stat.count}">1</td>
+                                            <td th:text="${user.id}">4</td>
+                                            <td th:text="${user.firstName + ' ' + user.lastName}">Boris The Blade</td>
+                                            <td th:text="${user.email}">kitten@mail.uk</td>
+                                        </tr>
+                                        <tr th:remove="all">
+                                            <td>2</td>
+                                            <td>5</td>
+                                            <td>Franky "Four-Fingers"</td>
+                                            <td>franky@mail.uk</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mb-3">
+                                    <a href="update-todo.html"
+                                       th:href="@{/}"
+                                       th:onclick="@{document.forms['todoForm'].reset(); return false;}"
+                                       class="btn btn-light me-1"
+                                       title="Clear form">Clear</a>
+                                    <a href="todos-user.html"
+                                       th:href="@{/}"
+                                       th:onclick="@{document.forms['todoForm'].submit(); return false;}"
+                                       class="btn btn-primary"
+                                       title="Update todo">Register</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

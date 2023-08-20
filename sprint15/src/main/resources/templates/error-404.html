@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/error-styles.css">
+  <title>Error Page</title>
+</head>
+<body>
+<div class="d-flex flex-row align-items-center">
+  <div th:replace="header"></div>
+  <div class="container">
+    <div class="col-md-12 text-center">
+      <h1 class="text-large">404</h1>
+      <div class="mb-4 lead">Oops! The page you are looking for was not found :(</div>
+      <div class="lead" th:text="${message}"></div>
+      <a th:href="@{/}" class="badge badge-primary">Okay, take me to the main page</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
